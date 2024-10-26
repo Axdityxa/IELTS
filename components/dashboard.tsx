@@ -1,16 +1,22 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { Auth } from '@/components/utils/auth'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Switch } from "@/components/ui/switch"
-import { Bell, ChevronDown, Github, Instagram, Linkedin, LogOut, Moon, Sun, Twitter, User, Flame } from 'lucide-react'
-import Link from 'next/link'
-import { Progress } from "@/components/ui/progress"
-import BasebandTestModal from '@/components/BasebandTestModal'
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Auth } from '@/components/utils/auth';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { Bell, ChevronDown, Github, Instagram, Linkedin, LogOut, Moon, Sun, Twitter, User, Flame, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Progress } from "@/components/ui/progress";
+import BasebandTestModal from '@/components/BasebandTestModal';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface UserType {
   attributes: {
@@ -19,43 +25,68 @@ interface UserType {
   };
 }
 
+interface CareerModeModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+// Career Mode Modal Component
+const CareerModeModal: React.FC<CareerModeModalProps> = ({ isOpen, onClose }) => {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-center">Career Mode Processing</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
+          <p className="text-center text-muted-foreground">
+            We are still processing this feature. Please check back later!
+          </p>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default function Dashboard() {
-  const [isDarkMode, setIsDarkMode] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState<UserType | null>(null)
-  const [isBasebandModalOpen, setIsBasebandModalOpen] = useState(false)
-  const router = useRouter()
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<UserType | null>(null);
+  const [isBasebandModalOpen, setIsBasebandModalOpen] = useState(false);
+  const [isCareerModalOpen, setIsCareerModalOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    const root = window.document.documentElement
-    root.classList.toggle('dark', isDarkMode)
-  }, [isDarkMode])
+    const root = window.document.documentElement;
+    root.classList.toggle('dark', isDarkMode);
+  }, [isDarkMode]);
 
   useEffect(() => {
-    checkAuthState()
-  }, [])
+    checkAuthState();
+  }, []);
 
   const checkAuthState = async () => {
     try {
-      const user = await Auth.currentAuthenticatedUser()
-      setIsAuthenticated(true)
-      setUser(user)
+      const user = await Auth.currentAuthenticatedUser();
+      setIsAuthenticated(true);
+      setUser(user);
     } catch (error) {
-      setIsAuthenticated(false)
-      setUser(null)
+      setIsAuthenticated(false);
+      setUser(null);
     }
-  }
+  };
 
   const handleSignOut = async () => {
     try {
-      await Auth.signOut()
-      setIsAuthenticated(false)
-      setUser(null)
-      router.push('/signin')
+      await Auth.signOut();
+      setIsAuthenticated(false);
+      setUser(null);
+      router.push('/signin');
     } catch (error) {
-      console.error('Error signing out: ', error)
+      console.error('Error signing out: ', error);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
@@ -199,7 +230,12 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <p className="mb-4">Prepare for your career with tailored IELTS practice.</p>
-              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">Start</Button>
+              <Button 
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                onClick={() => setIsCareerModalOpen(true)}
+              >
+                Start
+              </Button>
             </CardContent>
           </Card>
           <Card className="bg-card text-card-foreground">
@@ -240,6 +276,11 @@ export default function Dashboard() {
         isOpen={isBasebandModalOpen} 
         onClose={() => setIsBasebandModalOpen(false)} 
       />
+
+      <CareerModeModal 
+        isOpen={isCareerModalOpen} 
+        onClose={() => setIsCareerModalOpen(false)} 
+      />
     </div>
-  )
+  );
 }
