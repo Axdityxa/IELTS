@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FaChartLine, FaUserGraduate, FaClipboardList, FaBook, FaBolt, FaCogs, FaUserShield } from 'react-icons/fa';
@@ -10,6 +11,7 @@ import CareerModeModal from './CareerModeModal';
 export default function DashboardContent() {
   const [isBasebandModalOpen, setIsBasebandModalOpen] = useState(false);
   const [isCareerModalOpen, setIsCareerModalOpen] = useState(false);
+  const router = useRouter(); // Initialize the router
 
   return (
     <main className="flex-grow container mx-auto px-4 py-8">
@@ -99,6 +101,7 @@ export default function DashboardContent() {
           <div className="mt-4">
             <Button 
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2"
+              onClick={() => router.push('/practise')} // Navigate to /practise on click
             >
               <FaChartLine />
               Start
