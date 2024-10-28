@@ -37,7 +37,7 @@ export default function DashboardContent() {
         </CardHeader>
         <CardContent>
           <p className="text-lg mb-4">
-            We're thrilled to assist you in your IELTS exam preparation journey. Before diving into practice sessions, we recommend taking a quick baseband test to assess your current level and tailor your study plan accordingly.
+            We&apos;re thrilled to assist you in your IELTS exam preparation journey. Before diving into practice sessions, we recommend taking a quick baseband test to assess your current level and tailor your study plan accordingly.
           </p>
           <Button 
             className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2"

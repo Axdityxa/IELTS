@@ -1,6 +1,5 @@
 import { Amplify } from 'aws-amplify';
 import { signIn, signOut, signUp, getCurrentUser, fetchUserAttributes } from 'aws-amplify/auth';
-import { FetchUserAttributesOutput } from '@aws-amplify/auth';
 
 Amplify.configure({
   Auth: {
@@ -15,7 +14,7 @@ Amplify.configure({
 interface AuthUser {
   attributes: {
     email: string;
-    [key: string]: any;
+    [key: string]: string | boolean | number | null;
   };
 }
 
@@ -61,7 +60,7 @@ export const Auth = {
       }
     };
   },
-  federatedSignIn: async ({ provider }: { provider: string }) => {
+  federatedSignIn: async ({ }) => {
     throw new Error('Federation not implemented');
   }
 };
