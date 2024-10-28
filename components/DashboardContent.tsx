@@ -13,6 +13,20 @@ export default function DashboardContent() {
   const [isCareerModalOpen, setIsCareerModalOpen] = useState(false);
   const router = useRouter(); // Initialize the router
 
+  const careerModeItems = [
+    { icon: <FaBolt className="text-primary" />, text: 'AI-Powered Practice' },
+    { icon: <FaBook className="text-primary" />, text: 'Curated Study Material' },
+    { icon: <FaCogs className="text-primary" />, text: 'Personalized Feedback' },
+    { icon: <FaUserShield className="text-primary" />, text: 'Career Guidance' },
+  ];
+
+  const practiceModeItems = [
+    { icon: <FaChartLine className="text-primary" />, text: 'Unlimited Tests' },
+    { icon: <FaBook className="text-primary" />, text: 'Free Study Material' },
+    { icon: <FaCogs className="text-primary" />, text: 'Basic Progress Tracking' },
+    { icon: <FaUserShield className="text-primary" />, text: 'Performance Insights' }, // Added to match career mode
+  ];
+
   return (
     <main className="flex-grow container mx-auto px-4 py-8">
       {/* Welcome Message Card */}
@@ -46,22 +60,12 @@ export default function DashboardContent() {
           <CardContent className="flex-grow flex flex-col">
             <p className="mb-4">Prepare for your career with tailored IELTS practice.</p>
             <ul className="flex-grow space-y-2 text-gray-600">
-              <li className="flex items-center gap-2">
-                <FaBolt className="text-primary" />
-                <span>AI-Powered Practice</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <FaBook className="text-primary" />
-                <span>Curated Study Material</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <FaCogs className="text-primary" />
-                <span>Personalized Feedback</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <FaUserShield className="text-primary" />
-                <span>Career Guidance</span>
-              </li>
+              {careerModeItems.map((item, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  {item.icon}
+                  <span>{item.text}</span>
+                </li>
+              ))}
             </ul>
           </CardContent>
           <div className="mt-4">
@@ -84,18 +88,12 @@ export default function DashboardContent() {
           <CardContent className="flex-grow flex flex-col">
             <p className="mb-4">Improve your skills with general IELTS practice sessions.</p>
             <ul className="flex-grow space-y-2 text-gray-600">
-              <li className="flex items-center gap-2">
-                <FaChartLine className="text-primary" />
-                <span>Unlimited Tests</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <FaBook className="text-primary" />
-                <span>Free Study Material</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <FaCogs className="text-primary" />
-                <span>Basic Progress Tracking</span>
-              </li>
+              {practiceModeItems.map((item, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  {item.icon}
+                  <span>{item.text}</span>
+                </li>
+              ))}
             </ul>
           </CardContent>
           <div className="mt-4">
