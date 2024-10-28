@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, memo } from 'react'
+import { memo, Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -484,8 +484,8 @@ const QuestionsCard = memo(({
 
 QuestionsCard.displayName = 'QuestionsCard'
 
-// Main component
-export default function ReadingTest() {
+// Create a component that uses useSearchParams
+function BasebandTestContent() {
   const searchParams = useSearchParams()
   const timerParam = searchParams.get('timer')
   const initialTime = (timerParam ? parseInt(timerParam) : 60) * 60
@@ -610,5 +610,16 @@ export default function ReadingTest() {
         </main>
       )}
     </div>
+  )
+}
+
+// Main page component
+export default function BasebandTest() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>}>
+      <BasebandTestContent />
+    </Suspense>
   )
 }
