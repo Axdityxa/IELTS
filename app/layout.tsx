@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 import localFont from "next/font/local";
@@ -17,7 +17,7 @@ const geistMono = localFont({
 
 export const metadata = {
   title: 'IELTS Prep',
-  description: 'Prepare for your IELTS exam with our comprehensive platform',
+  description: 'IELTS Preparation Platform'
 }
 
 export default function RootLayout({

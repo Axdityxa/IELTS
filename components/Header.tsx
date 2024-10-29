@@ -13,7 +13,7 @@ import { Progress } from "@/components/ui/progress"
 interface UserType {
   attributes: {
     email: string;
-    [key: string]: any;
+    [key: string]: string | boolean | number | null;
   };
 }
 
@@ -37,7 +37,7 @@ export default function Header() {
       const user = await Auth.currentAuthenticatedUser()
       setIsAuthenticated(true)
       setUser(user)
-    } catch (error) {
+    } catch {
       setIsAuthenticated(false)
       setUser(null)
     }
