@@ -1,6 +1,6 @@
 'use client';
-
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Book, Mic, Headphones, Pencil, ArrowLeft, LayoutGrid, Timer } from 'lucide-react';
@@ -13,6 +13,7 @@ type Section = {
 };
 
 export default function PracticeMode() {
+  const router = useRouter(); // Initialize useRouter
   const [currentScreen, setCurrentScreen] = useState('mode-select');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [questionCount, setQuestionCount] = useState<number>(10);
@@ -43,6 +44,7 @@ export default function PracticeMode() {
       questionCount: questionCount,
       mode: currentScreen === 'full-test' ? 'full' : 'practice'
     });
+    router.push('/Test-mode'); // Navigate to TestMode page
   };
 
   const renderModeSelect = () => (
@@ -174,7 +176,7 @@ export default function PracticeMode() {
             key={id}
             variant="outline"
             className="h-20 flex items-center gap-4 text-left justify-start px-6 text-lg hover:bg-slate-100"
-            onClick={startTest}
+            onClick={startTest} // Navigate on Full Test button click
           >
             <Icon className="h-8 w-8" />
             <span className="text-lg">{title} Full Test</span>
