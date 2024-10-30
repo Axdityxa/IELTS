@@ -310,12 +310,21 @@ const QuestionsCard = memo(({
           >
             {question.options?.map((option) => (
               <div key={option.id} className="flex items-center space-x-2 mb-2">
-                <RadioGroupItem value={option.id} id={`${question.id}-${option.id}`} />
+                <div
+                  className={`flex items-center justify-center w-5 h-5 border border-gray-300 rounded-full ${
+                    answers[question.id] === option.id ? 'bg-black' : 'bg-white'
+                  }`}
+                  onClick={() => handleAnswer(question.id, option.id)}
+                >
+                  {answers[question.id] === option.id && (
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  )}
+                </div>
                 <Label htmlFor={`${question.id}-${option.id}`}>{option.text}</Label>
               </div>
             ))}
           </RadioGroup>
-        )
+        );
       case 'trueFalseNotGiven':
         return (
           <RadioGroup
@@ -324,12 +333,21 @@ const QuestionsCard = memo(({
           >
             {['TRUE', 'FALSE', 'NOT GIVEN'].map((option) => (
               <div key={option} className="flex items-center space-x-2 mb-2">
-                <RadioGroupItem value={option} id={`${question.id}-${option}`} />
+                <div
+                  className={`flex items-center justify-center w-5 h-5 border border-gray-300 rounded-full ${
+                    answers[question.id] === option ? 'bg-blue-500' : 'bg-white'
+                  }`}
+                  onClick={() => handleAnswer(question.id, option)}
+                >
+                  {answers[question.id] === option && (
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  )}
+                </div>
                 <Label htmlFor={`${question.id}-${option}`}>{option}</Label>
               </div>
             ))}
           </RadioGroup>
-        )
+        );
       case 'fillInBlanks':
         return (
           <div className="space-y-4">
@@ -342,15 +360,15 @@ const QuestionsCard = memo(({
                   className="border rounded p-2"
                   value={answers[question.id]?.split(',')[index] || ''}
                   onChange={(e) => {
-                    const newAnswers = answers[question.id]?.split(',') || []
-                    newAnswers[index] = e.target.value
-                    handleAnswer(question.id, newAnswers.join(','))
+                    const newAnswers = answers[question.id]?.split(',') || [];
+                    newAnswers[index] = e.target.value;
+                    handleAnswer(question.id, newAnswers.join(','));
                   }}
                 />
               </div>
             ))}
           </div>
-        )
+        );
       case 'matching':
         return (
           <div className="space-y-4">
@@ -361,9 +379,9 @@ const QuestionsCard = memo(({
                   className="border rounded p-2"
                   value={answers[question.id]?.split(',')[index] || ''}
                   onChange={(e) => {
-                    const newAnswers = answers[question.id]?.split(',') || []
-                    newAnswers[index] = e.target.value
-                    handleAnswer(question.id, newAnswers.join(','))
+                    const newAnswers = answers[question.id]?.split(',') || [];
+                    newAnswers[index] = e.target.value;
+                    handleAnswer(question.id, newAnswers.join(','));
                   }}
                 >
                   <option value="">Select match</option>
@@ -376,12 +394,12 @@ const QuestionsCard = memo(({
               </div>
             ))}
           </div>
-        )
+        );
       default:
-        return null
+        return null;
     }
-  }
-
+  };
+  
   const renderSection = (questions: Question[], title: string) => (
     <div className="mb-8">
       <h3 className="text-xl font-bold mb-4">{title}</h3>
