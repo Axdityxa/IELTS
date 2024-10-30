@@ -440,18 +440,20 @@ QuestionsCard.displayName = 'QuestionsCard'
 // New Review component
 const Review = ({ answers, testData }: { answers: Answers, testData: Part[] }) => {
   return (
-    <div className="grid gap-4">
-      {testData.map((part) => (
-        <div key={part.part}>
-          <h3 className="text-lg font-bold mb-2">Part {part.part}</h3>
-          {part.questions.map((question) => (
-            <div 
-              key={question.id} 
-              className={`p-2 rounded ${answers[question.id] ? 'bg-green-100' : 'bg-red-100'}`}
-            >
-              Question {question.id}: {answers[question.id] ? 'Answered' : 'Not answered'}
-            </div>
-          ))}
+    <div className="space-y-6">
+      {[1, 2, 3].map((partNum) => (
+        <div key={partNum} className="space-y-4">
+          <h3 className="font-semibold">Part {partNum}</h3>
+          <div className="grid grid-cols-5 gap-2">
+            {[1, 2, 3, 4, 5].map((num) => (
+              <div
+                key={num}
+                className="flex h-10 w-10 items-center justify-center rounded-md bg-muted hover:bg-muted/80 cursor-pointer"
+              >
+                {num}
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
@@ -539,7 +541,7 @@ function BasebandTestContent() {
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline">Review</Button>
+              <Button variant="outline">Review </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
