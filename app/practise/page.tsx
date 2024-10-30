@@ -1,9 +1,13 @@
 'use client';
+
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Book, Mic, Headphones, Pencil, ArrowLeft, LayoutGrid, Timer } from 'lucide-react';
+import ReadingTest from '@/components/Modes/Read';
+import WritingTest from '@/components/Modes/Write';
+import SpeakingTest from '@/components/Modes/Speak';
+import ListeningTest from '@/components/Modes/Listen';
 
 type Section = {
   id: string;
@@ -13,7 +17,6 @@ type Section = {
 };
 
 export default function PracticeMode() {
-  const router = useRouter(); // Initialize useRouter
   const [currentScreen, setCurrentScreen] = useState('mode-select');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [questionCount, setQuestionCount] = useState<number>(10);
@@ -33,18 +36,13 @@ export default function PracticeMode() {
       setSelectedSection(null);
     } else if (currentScreen === 'questionCount') {
       setCurrentScreen('subsections');
-    } else if (['section-practice', 'full-test'].includes(currentScreen)) {
+    } else if (['section-practice', 'full-test', 'test'].includes(currentScreen)) {
       setCurrentScreen('mode-select');
     }
   };
 
   const startTest = () => {
-    console.log('Starting test with:', {
-      section: selectedSection,
-      questionCount: questionCount,
-      mode: currentScreen === 'full-test' ? 'full' : 'practice'
-    });
-    router.push('/Test-mode'); // Navigate to TestMode page
+    setCurrentScreen('test');
   };
 
   const renderModeSelect = () => (
@@ -176,7 +174,10 @@ export default function PracticeMode() {
             key={id}
             variant="outline"
             className="h-20 flex items-center gap-4 text-left justify-start px-6 text-lg hover:bg-slate-100"
-            onClick={startTest} // Navigate on Full Test button click
+            onClick={() => {
+              setSelectedSection(id);
+              startTest();
+            }}
           >
             <Icon className="h-8 w-8" />
             <span className="text-lg">{title} Full Test</span>
@@ -185,6 +186,21 @@ export default function PracticeMode() {
       </div>
     </div>
   );
+
+  const renderTest = () => {
+    switch (selectedSection) {
+      case 'reading':
+        return <ReadingTest />;
+      case 'writing':
+        return <WritingTest />;
+      case 'speaking':
+        return <SpeakingTest />;
+      case 'listening':
+        return <ListeningTest />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <Card className="w-[1024px] mx-auto">
@@ -197,6 +213,7 @@ export default function PracticeMode() {
         {currentScreen === 'subsections' && renderSubsections()}
         {currentScreen === 'questionCount' && renderQuestionCount()}
         {currentScreen === 'full-test' && renderFullTest()}
+        {currentScreen === 'test' && renderTest()}
       </CardContent>
     </Card>
   );

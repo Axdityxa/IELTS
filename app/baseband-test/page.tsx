@@ -9,7 +9,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Alert } from "@/components/ui/alert"
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Timer, X } from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 // TypeScript interfaces
 interface Option {
@@ -39,10 +46,10 @@ interface Answers {
 
 // Test data
 const testData: Part[] = [
-    {
-      part: 1,
-      title: "READING PASSAGE 1",
-      passage: `How the mind ages
+  {
+    part: 1,
+    title: "READING PASSAGE 1",
+    passage: `How the mind ages
     
     The way mental function changes is largely determined by three factors-mental lifestyle, the impact of chronic disease and flexibility of the mind.
     
@@ -59,95 +66,68 @@ const testData: Part[] = [
     Moreover, research has shown that engaging in mentally stimulating activities throughout life can help maintain cognitive function in later years. This includes activities such as reading, learning new skills, solving puzzles, and engaging in social interactions. Physical exercise has also been shown to have positive effects on cognitive function, particularly in older adults.
     
     In conclusion, while some aspects of cognitive function may decline with age, the brain remains remarkably adaptable. By maintaining an active mental lifestyle, managing chronic health conditions, and cultivating cognitive flexibility, it's possible to maintain and even improve mental sharpness well into old age.`,
-      questions: [
-        // Multiple Choice Questions (1-5)
-        {
-          id: 1,
-          type: 'multipleChoice',
-          text: "What does the writer say about the performance of older typists on the test?",
-          options: [
-            { id: 'A', text: "They used different motor skills from younger typists." },
-            { id: 'B', text: "They had been more efficiently trained than younger typists." },
-            { id: 'C', text: "They used more time-saving techniques than younger typists." },
-            { id: 'D', text: "They had better concentration skills than younger typists." }
-          ]
-        },
-        {
-          id: 2,
-          type: 'multipleChoice',
-          text: "The experiment with the rats showed that",
-          options: [
-            { id: 'A', text: "brain structure only changed when the rats were given a familiar toy" },
-            { id: 'B', text: "the rats became anxious after a lengthy period of time alone" },
-            { id: 'C', text: "the rats lived longer then they were part of a social group" },
-            { id: 'D', text: "the rats' brains expanded or shrank depending on the level of mental activity" }
-          ]
-        },
-        {
-          id: 3,
-          type: 'multipleChoice',
-          text: "A comparison between adults and children who played chess showed that",
-          options: [
-            { id: 'A', text: "the children were as capable as the adults of remembering a series of numbers." },
-            { id: 'B', text: "the children could better recall the layout of pieces." },
-            { id: 'C', text: "the adults were less able to concentrate on the game." },
-            { id: 'D', text: "the adults could remember the positions of more pieces." }
-          ]
-        },
-        {
-          id: 4,
-          type: 'multipleChoice',
-          text: "According to the passage, which cognitive ability often improves with age?",
-          options: [
-            { id: 'A', text: "Processing speed" },
-            { id: 'B', text: "Short-term memory" },
-            { id: 'C', text: "Vocabulary" },
-            { id: 'D', text: "Reaction time" }
-          ]
-        },
-        {
-          id: 5,
-          type: 'multipleChoice',
-          text: "What helps maintain cognitive function in later years?",
-          options: [
-            { id: 'A', text: "Sleeping longer hours" },
-            { id: 'B', text: "Taking memory supplements" },
-            { id: 'C', text: "Engaging in mentally stimulating activities" },
-            { id: 'D', text: "Following a strict diet" }
-          ]
-        },
-        
-        // Fill in the Blanks (6-9)
-        {
-          id: 6,
-          type: 'fillInBlanks',
-          text: "Complete the following sentences using NO MORE THAN THREE WORDS from the passage.",
-          blanks: [
-            "Mental function changes are determined by mental lifestyle, chronic disease, and _______.",
-            "Studies showed that mental abilities are sharpest at _______ in the morning.",
-            "Older typists compensated for slower speed by developing more _______ methods.",
-            "The ability to adapt and find new ways of doing things is known as _______."
-          ]
-        },
-        
-        // Matching Questions (10-13)
-        {
-          id: 10,
-          type: 'matching',
-          text: "Match the following concepts with their correct descriptions from the passage.",
-          correctMatches: {
-            "Cognitive flexibility": "The ability to adapt and find new ways of doing things",
-            "Processing speed": "An ability that may decline with age",
-            "Vocabulary": "An ability that often remains stable or improves over time",
-            "Mental performance": "Peaks at different times for different age groups"
-          }
+    questions: [
+      {
+        id: 1,
+        type: 'multipleChoice',
+        text: "What does the writer say about the performance of older typists on the test?",
+        options: [
+          { id: 'A', text: "They used different motor skills from younger typists." },
+          { id: 'B', text: "They had been more efficiently trained than younger typists." },
+          { id: 'C', text: "They used more time-saving techniques than younger typists." },
+          { id: 'D', text: "They had better concentration skills than younger typists." }
+        ]
+      },
+      {
+        id: 2,
+        type: 'multipleChoice',
+        text: "The experiment with the rats showed that",
+        options: [
+          { id: 'A', text: "brain structure only changed when the rats were given a familiar toy" },
+          { id: 'B', text: "the rats became anxious after a lengthy period of time alone" },
+          { id: 'C', text: "the rats lived longer then they were part of a social group" },
+          { id: 'D', text: "the rats' brains expanded or shrank depending on the level of mental activity" }
+        ]
+      },
+      {
+        id: 3,
+        type: 'multipleChoice',
+        text: "A comparison between adults and children who played chess showed that",
+        options: [
+          { id: 'A', text: "the children were as capable as the adults of remembering a series of numbers." },
+          { id: 'B', text: "the children could better recall the layout of pieces." },
+          { id: 'C', text: "the adults were less able to concentrate on the game." },
+          { id: 'D', text: "the adults could remember the positions of more pieces." }
+        ]
+      },
+      {
+        id: 4,
+        type: 'fillInBlanks',
+        text: "Complete the following sentences using NO MORE THAN THREE WORDS from the passage.",
+        blanks: [
+          "Mental function changes are determined by mental lifestyle, chronic disease, and _______.",
+          "Studies showed that mental abilities are sharpest at _______ in the morning.",
+          "Older typists compensated for slower speed by developing more _______ methods.",
+          "The ability to adapt and find new ways of doing things is known as _______."
+        ]
+      },
+      {
+        id: 5,
+        type: 'matching',
+        text: "Match the following concepts with their correct descriptions from the passage.",
+        correctMatches: {
+          "Cognitive flexibility": "The ability to adapt and find new ways of doing things",
+          "Processing speed": "An ability that may decline with age",
+          "Vocabulary": "An ability that often remains stable or improves over time",
+          "Mental performance": "Peaks at different times for different age groups"
         }
-      ]
-    },
-    {
-      part: 2,
-      title: "READING PASSAGE 2",
-      passage: `Ensuring our future food supply
+      }
+    ]
+  },
+  {
+    part: 2,
+    title: "READING PASSAGE 2",
+    passage: `Ensuring our future food supply
     
     Climate change and new diseases threaten the limited varieties of seeds we depend on for food. Luckily, we still have many of the seeds used in the past-but we must take steps to save them.
     
@@ -166,74 +146,60 @@ const testData: Part[] = [
     In recent years, there has been growing interest in heirloom and rare plant varieties among gardeners and small-scale farmers. This trend has helped support the work of seed preservation organizations and has led to a resurgence of some nearly-lost varieties. However, the challenge of maintaining seed diversity remains significant, especially as climate change and habitat loss continue to threaten plant species around the world.
     
     As we look to the future, it's clear that preserving our agricultural heritage through seed saving will be crucial for ensuring food security and maintaining the rich tapestry of plant life on our planet. The work of dedicated individuals and organizations like the Seed Savers Exchange reminds us that sometimes, the key to our future lies in preserving the past.`,
-      questions: [
-        // True/False/Not Given (14-18)
-        {
-          id: 14,
-          type: 'trueFalseNotGiven',
-          text: "Heritage Farm is different from most other nearby farms."
-        },
-        {
-          id: 15,
-          type: 'trueFalseNotGiven',
-          text: "Most nongovernment-owned seed banks are bigger than Seed Savers Exchange."
-        },
-        {
-          id: 16,
-          type: 'trueFalseNotGiven',
-          text: "Diane Ott Whealy's grandfather taught her a lot about seed varieties."
-        },
-        {
-          id: 17,
-          type: 'trueFalseNotGiven',
-          text: "The Seed Savers Exchange maintains records of the cultural history of seeds."
-        },
-        {
-          id: 18,
-          type: 'trueFalseNotGiven',
-          text: "Climate change has no effect on seed preservation efforts."
-        },
-        
-        // Multiple Choice Questions (19-26)
-        {
-          id: 19,
-          type: 'multipleChoice',
-          text: "What was the main reason for establishing the Seed Savers Exchange?",
-          options: [
-            { id: 'A', text: "To preserve endangered plant varieties" },
-            { id: 'B', text: "To promote large-scale agriculture" },
-            { id: 'C', text: "To study Bavarian farming methods" },
-            { id: 'D', text: "To create new plant varieties" }
-          ]
-        },
-        {
-          id: 20,
-          type: 'multipleChoice',
-          text: "What is unique about the Seed Savers Exchange approach?",
-          options: [
-            { id: 'A', text: "Its focus on the cultural history of seeds" },
-            { id: 'B', text: "Its government funding" },
-            { id: 'C', text: "Its international scope" },
-            { id: 'D', text: "Its modern farming techniques" }
-          ]
-        },
-        {
-          id: 21,
-          type: 'multipleChoice',
-          text: "The 'Mortgage Lifter' tomato variety is mentioned as an example of",
-          options: [
-            { id: 'A', text: "A failed agricultural experiment" },
-            { id: 'B', text: "A historically significant plant" },
-            { id: 'C', text: "A modern hybrid variety" },
-            { id: 'D', text: "A commercially successful crop" }
-          ]
-        }
-      ]
-    },
-    {
-      part: 3,
-      title: "READING PASSAGE 3",
-      passage: `The fluoridation controversy
+    questions: [
+      {
+        id: 6,
+        type: 'trueFalseNotGiven',
+        text: "Heritage Farm is different from most other nearby farms."
+      },
+      {
+        id: 7,
+        type: 'trueFalseNotGiven',
+        text: "The Seed Savers Exchange was founded to preserve plant varieties that were becoming extinct."
+      },
+      {
+        id: 8,
+        type: 'trueFalseNotGiven',
+        text: "The Seed Savers Exchange only preserves seeds of vegetables."
+      },
+      {
+        id: 9,
+        type: 'trueFalseNotGiven',
+        text: "The Svalbard Global Seed Vault focuses on preserving a wide variety of plant species."
+      },
+      {
+        id: 10,
+        type: 'trueFalseNotGiven',
+        text: "Interest in heirloom and rare plant varieties has decreased in recent years."
+      },
+      {
+        id: 11,
+        type: 'multipleChoice',
+        text: "What was the main reason for establishing the Seed Savers Exchange?",
+        options: [
+          { id: 'A', text: "To preserve endangered plant varieties" },
+          { id: 'B', text: "To promote large-scale agriculture" },
+          { id: 'C', text: "To study Bavarian farming methods" },
+          { id: 'D', text: "To create new plant varieties" }
+        ]
+      },
+      {
+        id: 12,
+        type: 'multipleChoice',
+        text: "What is unique about the Seed Savers Exchange approach?",
+        options: [
+          { id: 'A', text: "Its focus on the cultural history of seeds" },
+          { id: 'B', text: "Its government funding" },
+          { id: 'C', text: "Its international scope" },
+          { id: 'D', text: "Its modern farming techniques" }
+        ]
+      }
+    ]
+  },
+  {
+    part: 3,
+    title: "READING PASSAGE 3",
+    passage: `The fluoridation controversy
     
     The long-standing debate about whether to fluoridate our drinking water continues. Fluoridation is the addition of fluorine to public water supplies with the aim of reducing tooth decay. The fluorine, when mixed with water, becomes fluoride and the desired concentration of fluoride in public water supplies is usually between 0.7 and 1.2 parts per million.
     
@@ -252,84 +218,71 @@ const testData: Part[] = [
     The fluoridation debate illustrates the challenges of public health policy in a democratic society. It involves balancing scientific evidence, public health benefits, individual rights, and the precautionary principle. As our understanding of fluoride's effects continues to evolve, and as alternative sources of fluoride become more prevalent, it's likely that this debate will continue for years to come.
     
     Ultimately, the decision to fluoridate water supplies often comes down to local politics and public opinion. While the scientific consensus supports the safety and effectiveness of water fluoridation, the practice remains controversial in many parts of the world. As with many public health measures, the challenge lies in balancing population-wide benefits with concerns about individual choice and potential risks.`,
-      questions: [
-        // Multiple Choice Questions (27-31)
-        {
-          id: 27,
-          type: 'multipleChoice',
-          text: "The optimum amount of fluorine in fluoridated water is calculated partly according to",
-          options: [
-            { id: 'A', text: "how hot the area is." },
-            { id: 'B', text: "how warm the water is." },
-            { id: 'C', text: "how many dental problems there are in the community." },
-            { id: 'D', text: "how much fluorine the community chooses to have in its water." }
-          ]
-        },
-        {
-          id: 28,
-          type: 'multipleChoice',
-          text: "One reason given by the writer for opposing fluoridation is that",
-          options: [
-            { id: 'A', text: "it may contribute to tooth decay" },
-            { id: 'B', text: "it will be unacceptably expensive for the public." },
-            { id: 'C', text: "obligatory fluoridation takes away personal freedom." },
-            { id: 'D', text: "excessive fluoride could be added to the water by mistake." }
-          ]
-        },
-        {
-          id: 29,
-          type: 'multipleChoice',
-          text: "The writer mentions Kuhn in order to",
-          options: [
-            { id: 'A', text: "provide a contrast with the view of Collins." },
-            { id: 'B', text: "support the notion that scientific facts are not fixed." },
-            { id: 'C', text: "illustrate that paradigms can shift over time." },
-            { id: 'D', text: "argue that fluoridation is based on outdated science." }
-          ]
-        },
-        
-        // Fill in the Blanks (32-35)
-        {
-          id: 32,
-          type: 'fillInBlanks',
-          text: "Complete the sentences below using NO MORE THAN TWO WORDS from the passage.",
-          blanks: [
-            "The desired concentration of fluoride in water is between _______ parts per million.",
-            "Fluoridation began in the _______ in the United States.",
-            "Some critics argue that fluoridation is a form of _______ without consent.",
-            "Israel ended its _______ fluoridation program in 2013."
-          ]
-        },
-        
-        // True/False/Not Given (36-40)
-        {
-          id: 36,
-          type: 'trueFalseNotGiven',
-          text: "The World Health Organization supports water fluoridation at recommended levels."
-        },
-        {
-          id: 37,
-          type: 'trueFalseNotGiven',
-          text: "All countries that have tried fluoridation have continued the practice."
-        },
-        {
-          id: 38,
-          type: 'trueFalseNotGiven',
-          text: "Severe fluorosis is common in areas with fluoridated water."
-        },
-        {
-          id: 39,
-          type: 'trueFalseNotGiven',
-          text: "The fluoridation debate has become less intense in recent years."
-        },
-        {
-          id: 40,
-          type: 'trueFalseNotGiven',
-          text: "Most people in the United States receive fluoridated water."
-        }
-      ]
-    }
-  ]
+    questions: [
+      {
+        id: 13,
+        type: 'multipleChoice',
+        text: "The optimum amount of fluorine in fluoridated water is calculated partly according to",
+        options: [
+          { id: 'A', text: "how hot the area is." },
+          { id: 'B', text: "how warm the water is." },
+          { id: 'C', text: "how many dental problems there are in the community." },
+          { id: 'D', text: "how much fluorine the community chooses to have in its water." }
+        ]
+      },
+      {
+        id: 14,
+        type: 'multipleChoice',
+        text: "Which of the following is NOT mentioned as a criticism of water fluoridation?",
+        options: [
+          { id: 'A', text: "It's a form of mass medication without consent." },
+          { id: 'B', text: "It may not be effective in reducing tooth decay." },
+          { 
+            id: 'C',
+            text: "It's too expensive to implement widely."
+          },
+          { id: 'D', text: "It may lead to dental fluorosis." }
+        ]
+      },
+      {
+        id: 15,
+        type: 'fillInBlanks',
+        text: "Complete the sentences below using NO MORE THAN TWO WORDS from the passage.",
+        blanks: [
+          "The desired concentration  of fluoride in water is between _______ parts per million.",
+          "Fluoridation began in the _______ in the United States.",
+          "Some critics argue that fluoridation is a form of _______ without consent.",
+          "Israel ended its _______ fluoridation program in 2013."
+        ]
+      },
+      {
+        id: 16,
+        type: 'trueFalseNotGiven',
+        text: "The World Health Organization supports water fluoridation at recommended levels."
+      },
+      {
+        id: 17,
+        type: 'trueFalseNotGiven',
+        text: "All countries that have implemented water fluoridation have seen a decrease in tooth decay rates."
+      },
+      {
+        id: 18,
+        type: 'trueFalseNotGiven',
+        text: "Severe dental fluorosis is common in areas with fluoridated water."
+      },
+      {
+        id: 19,
+        type: 'trueFalseNotGiven',
+        text: "The majority of the US population on public water systems receives fluoridated water."
+      },
+      {
+        id: 20,
+        type: 'trueFalseNotGiven',
+        text: "The fluoridation debate has been completely resolved in most countries."
+      }
+    ]
+  }
+]
 
 // Memoized QuestionsCard component
 const QuestionsCard = memo(({ 
@@ -484,6 +437,27 @@ const QuestionsCard = memo(({
 
 QuestionsCard.displayName = 'QuestionsCard'
 
+// New Review component
+const Review = ({ answers, testData }: { answers: Answers, testData: Part[] }) => {
+  return (
+    <div className="grid gap-4">
+      {testData.map((part) => (
+        <div key={part.part}>
+          <h3 className="text-lg font-bold mb-2">Part {part.part}</h3>
+          {part.questions.map((question) => (
+            <div 
+              key={question.id} 
+              className={`p-2 rounded ${answers[question.id] ? 'bg-green-100' : 'bg-red-100'}`}
+            >
+              Question {question.id}: {answers[question.id] ? 'Answered' : 'Not answered'}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 // Create a component that uses useSearchParams
 function BasebandTestContent() {
   const searchParams = useSearchParams()
@@ -558,8 +532,22 @@ function BasebandTestContent() {
     <div className="min-h-screen bg-background">
       <header className="border-b p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">IELTS Reading Test</h1>
-        <div className={`text-xl font-semibold ${timeLeft < 300 ? 'text-red-500' : ''}`}>
-          {formatTime(timeLeft)} remaining
+        <div className="flex items-center space-x-4">
+          <div className={`text-xl font-semibold flex items-center ${timeLeft < 300 ? 'text-red-500' : ''}`}>
+            <Timer className="mr-2 h-5 w-5" />
+            {formatTime(timeLeft)} remaining
+          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">Review</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Review Answers</DialogTitle>
+              </DialogHeader>
+              <Review answers={answers} testData={testData} />
+            </DialogContent>
+          </Dialog>
         </div>
       </header>
 
@@ -569,10 +557,13 @@ function BasebandTestContent() {
         </Alert>
       ) : (
         <main className="container mx-auto p-4">
-          <Progress 
-            value={(timeLeft / (60 * 60)) * 100} 
-            className="mb-4"
-          />
+          <div className="relative mb-4">
+            <Timer className="absolute left-0 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary" />
+            <Progress 
+              value={100 - ((timeLeft / initialTime) * 100)} 
+              className="h-6 ml-6"
+            />
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card className="h-[calc(100vh-200px)] overflow-y-auto">
