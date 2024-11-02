@@ -166,6 +166,14 @@ export default function Header() {
               </Button>
             </>
           )}
+          {/* Analytics Button */}
+          <Button
+            variant="default"
+            className="bg-black text-white"
+            onClick={() => router.push('/analytics')}
+          >
+            Analytics
+          </Button>
         </div>
       </div>
     </header>
