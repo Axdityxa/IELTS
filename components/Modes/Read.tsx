@@ -18,7 +18,7 @@ import {
 
 export default function Component() {
   const [currentPart, setCurrentPart] = useState(1)
-  const [timeLeft, setTimeLeft] = useState(300)
+  const [timeLeft, setTimeLeft] = useState(300) // 5 minutes for demo
   const [answers, setAnswers] = useState<Record<number, string>>({})
 
   useEffect(() => {
@@ -35,8 +35,8 @@ export default function Component() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-background">
-      <header className="border-b p-4 flex justify-between items-center sticky top-0 bg-background z-10">
+    <div className="min-h-screen bg-background flex flex-col w-full">
+      <header className="border-b px-4 py-2 flex justify-between items-center">
         <h1 className="text-2xl font-bold">IELTS Reading Test</h1>
         <div className="flex items-center space-x-4">
           <div className={`text-xl font-semibold flex items-center ${timeLeft < 60 ? 'text-red-500' : ''}`}>
@@ -75,19 +75,19 @@ export default function Component() {
         </div>
       </header>
 
-      <main className="w-full p-4">
-        <div className="relative mb-4 max-w-full mx-auto">
+      <main className="flex-grow flex flex-col">
+        <div className="relative mb-4">
           <Timer className="absolute left-0 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary" />
           <Progress value={(300 - timeLeft) / 3} className="h-6 ml-6" />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-4 max-w-full mx-auto">
-          <Card className="h-[calc(100vh-200px)] overflow-y-auto">
-            <CardContent className="p-6">
+        <div className="flex-grow grid lg:grid-cols-2 gap-4">
+          <Card className="h-full overflow-y-auto">
+            <CardContent className="p-4">
               <h2 className="text-xl font-bold mb-4">READING PASSAGE 1</h2>
-              <div className="prose max-w-none">
+              <div className="prose max-w-none" style={{ maxWidth: "65ch" }}>
                 <h3 className="text-lg font-semibold">How the mind ages</h3>
-                
+
                 <p className="mt-4">
                   The way mental function changes is largely determined by three factors-mental lifestyle,
                   the impact of chronic disease and flexibility of the mind.
@@ -169,8 +169,8 @@ export default function Component() {
             </CardContent>
           </Card>
 
-          <Card className="h-[calc(100vh-200px)] overflow-y-auto">
-            <CardContent className="p-6">
+          <Card className="h-full overflow-y-auto">
+            <CardContent className="p-4">
               <Tabs defaultValue="1" onValueChange={(value) => setCurrentPart(Number(value))}>
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="1">Part 1</TabsTrigger>
