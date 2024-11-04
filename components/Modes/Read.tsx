@@ -18,7 +18,7 @@ import {
 
 export default function Component() {
   const [currentPart, setCurrentPart] = useState(1)
-  const [timeLeft, setTimeLeft] = useState(300) // 5 minutes for demo
+  const [timeLeft, setTimeLeft] = useState(300)
   const [answers, setAnswers] = useState<Record<number, string>>({})
 
   useEffect(() => {
@@ -35,8 +35,8 @@ export default function Component() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b p-4 flex justify-between items-center">
+    <div className="w-full min-h-screen bg-background">
+      <header className="border-b p-4 flex justify-between items-center sticky top-0 bg-background z-10">
         <h1 className="text-2xl font-bold">IELTS Reading Test</h1>
         <div className="flex items-center space-x-4">
           <div className={`text-xl font-semibold flex items-center ${timeLeft < 60 ? 'text-red-500' : ''}`}>
@@ -75,13 +75,13 @@ export default function Component() {
         </div>
       </header>
 
-      <main className="container mx-auto p-4">
-        <div className="relative mb-4">
+      <main className="w-full p-4">
+        <div className="relative mb-4 max-w-full mx-auto">
           <Timer className="absolute left-0 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary" />
           <Progress value={(300 - timeLeft) / 3} className="h-6 ml-6" />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-2 gap-4 max-w-full mx-auto">
           <Card className="h-[calc(100vh-200px)] overflow-y-auto">
             <CardContent className="p-6">
               <h2 className="text-xl font-bold mb-4">READING PASSAGE 1</h2>
