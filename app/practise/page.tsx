@@ -1,151 +1,168 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Book, Mic, Headphones, Pencil, ArrowLeft, LayoutGrid, Timer } from 'lucide-react';
-import WritingTest from '@/components/Modes/Write';
-import SpeakingTest from '@/components/Modes/Speak';
-import ListeningTest from '@/components/Modes/Listen';
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Book, Mic, Headphones, Pencil, ArrowLeft, LayoutGrid, Timer } from 'lucide-react'
+import WritingTest from '@/components/Modes/Write'
+import SpeakingTest from '@/components/Modes/Speak'
+import ListeningTest from '@/components/Modes/Listen'
 
 type Section = {
-  id: string;
-  title: string;
-  icon: React.ElementType;
-  subsections: string[];
-};
+  id: string
+  title: string
+  icon: React.ElementType
+  subsections: { id: string; title: string }[]
+}
+
+const sections: Section[] = [
+  {
+    id: 'reading',
+    title: 'Reading',
+    icon: Book,
+    subsections: [
+      { id: 'academic-reading', title: 'Academic Reading' },
+      { id: 'general-training-reading', title: 'General Training Reading' }
+    ]
+  },
+  {
+    id: 'speaking',
+    title: 'Speaking',
+    icon: Mic,
+    subsections: [
+      { id: 'part-1', title: 'Part 1: Introduction' },
+      { id: 'part-2', title: 'Part 2: Long Turn' },
+      { id: 'part-3', title: 'Part 3: Discussion' }
+    ]
+  },
+  {
+    id: 'listening',
+    title: 'Listening',
+    icon: Headphones,
+    subsections: [
+      { id: 'section-1', title: 'Section 1' },
+      { id: 'section-2', title: 'Section 2' },
+      { id: 'section-3', title: 'Section 3' },
+      { id: 'section-4', title: 'Section 4' }
+    ]
+  },
+  {
+    id: 'writing',
+    title: 'Writing',
+    icon: Pencil,
+    subsections: [
+      { id: 'task-1', title: 'Task 1' },
+      { id: 'task-2', title: 'Task 2' }
+    ]
+  }
+]
+
+const questionOptions = [5, 10, 15, 20]
 
 export default function PracticeMode() {
-  const router = useRouter(); // Initialize the router
-  const [currentScreen, setCurrentScreen] = useState('mode-select');
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
-  const [questionCount, setQuestionCount] = useState<number>(10);
-
-  const sections: Section[] = [
-    { id: 'reading', title: 'Reading', icon: Book, subsections: ['Academic Reading', 'General Training Reading'] },
-    { id: 'speaking', title: 'Speaking', icon: Mic, subsections: ['Part 1: Introduction', 'Part 2: Long Turn', 'Part 3: Discussion'] },
-    { id: 'listening', title: 'Listening', icon: Headphones, subsections: ['Section 1', 'Section 2', 'Section 3', 'Section 4'] },
-    { id: 'writing', title: 'Writing', icon: Pencil, subsections: ['Task 1', 'Task 2'] }
-  ];
-
-  const questionOptions = [5, 10, 15, 20];
+  const router = useRouter()
+  const [currentScreen, setCurrentScreen] = useState('mode-select')
+  const [selectedSection, setSelectedSection] = useState<string | null>(null)
+  const [selectedSubsection, setSelectedSubsection] = useState<string | null>(null)
+  const [questionCount, setQuestionCount] = useState<number>(10)
+  const [isModalOpen, setModalOpen] = useState(false)
 
   const handleBack = () => {
     if (currentScreen === 'subsections') {
-      setCurrentScreen('section-practice');
-      setSelectedSection(null);
+      setCurrentScreen('section-practice')
+      setSelectedSection(null)
+      setModalOpen(false)
     } else if (currentScreen === 'questionCount') {
-      setCurrentScreen('subsections');
+      setCurrentScreen('subsections')
     } else if (['section-practice', 'full-test', 'test'].includes(currentScreen)) {
-      setCurrentScreen('mode-select');
+      setCurrentScreen('mode-select')
     }
-  };
+  }
 
   const startTest = () => {
-    setCurrentScreen('test');
-  };
+    setCurrentScreen('test')
+  }
 
   const renderModeSelect = () => (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold text-center mb-10">Select Practice Mode</h2>
+    <div className="space-y-8">
+      <h2 className="text-3xl font-bold text-center mb-10">Select Practice Mode</h2>
       <div className="grid grid-cols-2 gap-8">
-        <Card className="hover:border-blue-500 cursor-pointer transition-colors" onClick={() => setCurrentScreen('section-practice')}>
+        <Card 
+          className="hover:border-primary cursor-pointer transition-all duration-300 transform hover:scale-105"
+          onClick={() => setCurrentScreen('section-practice')}
+        >
           <CardContent className="pt-6">
             <div className="flex flex-col items-center gap-4 p-6">
-              <LayoutGrid className="h-20 w-20 text-blue-500" />
+              <LayoutGrid className="h-24 w-24 text-primary" />
               <div className="text-center">
-                <h3 className="text-xl font-semibold mb-2">Section Practice</h3>
-                <p className="text-gray-600">Practice specific sections and subsections with customizable number of questions</p>
+                <h3 className="text-2xl font-semibold mb-2">Section Practice</h3>
+                <p className="text-muted-foreground">Practice specific sections and subsections with customizable number of questions</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="hover:border-blue-500 cursor-pointer transition-colors" onClick={() => setCurrentScreen('full-test')}>
+        <Card 
+          className="hover:border-primary cursor-pointer transition-all duration-300 transform hover:scale-105"
+          onClick={() => setCurrentScreen('full-test')}
+        >
           <CardContent className="pt-6">
             <div className="flex flex-col items-center gap-4 p-6">
-              <Timer className="h-20 w-20 text-blue-500" />
+              <Timer className="h-24 w-24 text-primary" />
               <div className="text-center">
-                <h3 className="text-xl font-semibold mb-2">Full Test</h3>
-                <p className="text-gray-600">Take a complete test with random questions from all subsections</p>
+                <h3 className="text-2xl font-semibold mb-2">Full Test</h3>
+                <p className="text-muted-foreground">Take a complete test with random questions from all subsections</p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  );
+  )
 
   const renderSectionPractice = () => (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-6">
+    <div className="space-y-6">
+      <div className="flex items-center gap-4 mb-8">
         <Button variant="outline" size="icon" onClick={handleBack}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <h2 className="text-xl font-semibold">Section Practice</h2>
+        <h2 className="text-2xl font-bold">Section Practice</h2>
       </div>
       <div className="grid grid-cols-2 gap-6">
         {sections.map(({ id, title, icon: Icon }) => (
           <Button
             key={id}
             variant="outline"
-            className="h-32 flex flex-col items-center justify-center gap-3 hover:bg-slate-100"
+            className="h-40 flex flex-col items-center justify-center gap-4 hover:bg-primary/10 transition-colors"
             onClick={() => {
-              setSelectedSection(id);
-              setCurrentScreen('subsections');
+              setSelectedSection(id)
+              setModalOpen(true)
             }}
           >
-            <Icon className="h-10 w-10" />
-            <span className="text-lg font-medium">{title}</span>
+            <Icon className="h-12 w-12 text-primary" />
+            <span className="text-xl font-medium">{title}</span>
           </Button>
         ))}
       </div>
     </div>
-  );
-
-  const renderSubsections = () => {
-    const section = sections.find(s => s.id === selectedSection);
-    if (!section) return null;
-
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center gap-2 mb-6">
-          <Button variant="outline" size="icon" onClick={handleBack}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <h2 className="text-xl font-semibold">{section.title} Practice</h2>
-        </div>
-        <div className="grid gap-3">
-          {section.subsections.map((subsection) => (
-            <Button
-              key={subsection}
-              variant="outline"
-              className="h-20 text-left justify-start px-6 text-lg hover:bg-slate-100"
-              onClick={() => setCurrentScreen('questionCount')}
-            >
-              {subsection}
-            </Button>
-          ))}
-        </div>
-      </div>
-    );
-  };
+  )
 
   const renderQuestionCount = () => (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-6">
+    <div className="space-y-6">
+      <div className="flex items-center gap-4 mb-8">
         <Button variant="outline" size="icon" onClick={handleBack}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <h2 className="text-xl font-semibold">Select Number of Questions</h2>
+        <h2 className="text-2xl font-bold">Select Number of Questions</h2>
       </div>
       <div className="grid grid-cols-4 gap-4">
         {questionOptions.map((count) => (
           <Button
             key={count}
             variant={questionCount === count ? "default" : "outline"}
-            className="h-24 text-xl"
+            className="h-28 text-2xl"
             onClick={() => setQuestionCount(count)}
           >
             {count} Questions
@@ -153,70 +170,93 @@ export default function PracticeMode() {
         ))}
       </div>
       <Button 
-        className="w-full h-16 mt-6 text-lg"
+        className="w-full h-16 mt-8 text-xl"
         onClick={startTest}
       >
         Start Practice
       </Button>
     </div>
-  );
+  )
 
   const renderFullTest = () => (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-6">
+    <div className="space-y-6">
+      <div className="flex items-center gap-4 mb-8">
         <Button variant="outline" size="icon" onClick={handleBack}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <h2 className="text-xl font-semibold">Full Test</h2>
+        <h2 className="text-2xl font-bold">Full Test</h2>
       </div>
-      <div className="grid gap-3">
+      <div className="grid gap-4">
         {sections.map(({ id, title, icon: Icon }) => (
           <Button
             key={id}
             variant="outline"
-            className="h-20 flex items-center gap-4 text-left justify-start px-6 text-lg hover:bg-slate-100"
+            className="h-24 flex items-center gap-6 text-left justify-start px-8 text-xl hover:bg-primary/10 transition-colors"
             onClick={() => {
-              setSelectedSection(id);
-              startTest();
+              setSelectedSection(id)
+              startTest()
             }}
           >
-            <Icon className="h-8 w-8" />
-            <span className="text-lg">{title} Full Test</span>
+            <Icon className="h-10 w-10 text-primary" />
+            <span className="text-xl">{title} Full Test</span>
           </Button>
         ))}
       </div>
     </div>
-  );
+  )
 
   const renderTest = () => {
     switch (selectedSection) {
       case 'reading':
-        router.push('/baseband-test?timer=5'); // Navigate to the specified URL when the reading test is selected
-        return null; // Return null as we don't want to render anything here
+        router.push('/baseband-test?timer=5')
+        return null
       case 'writing':
-        return <WritingTest />;
+        return <WritingTest />
       case 'speaking':
-        return <SpeakingTest />;
+        return <SpeakingTest />
       case 'listening':
-        return <ListeningTest />;
+        return <ListeningTest />
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
-    <Card className="w-[1024px] mx-auto">
+    <Card className="w-full max-w-5xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-3xl text-center font-bold">IELTS Practice Mode</CardTitle>
+        <CardTitle className="text-4xl text-center font-bold">IELTS Practice Mode</CardTitle>
       </CardHeader>
       <CardContent>
         {currentScreen === 'mode-select' && renderModeSelect()}
         {currentScreen === 'section-practice' && renderSectionPractice()}
-        {currentScreen === 'subsections' && renderSubsections()}
         {currentScreen === 'questionCount' && renderQuestionCount()}
         {currentScreen === 'full-test' && renderFullTest()}
         {currentScreen === 'test' && renderTest()}
+
+        <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold mb-4">Select a Subsection</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4">
+              {sections.find(s => s.id === selectedSection)?.subsections.map(({ id, title }) => (
+                <Button
+                  key={id}
+                  variant="outline"
+                  className="h-16 justify-start text-lg hover:bg-primary/10 transition-colors"
+                  onClick={() => {
+                    setSelectedSubsection(id)
+                    setModalOpen(false)
+                    setCurrentScreen('questionCount')
+                  }}
+                >
+                  {title}
+                </Button>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
-  );
+  )
 }
