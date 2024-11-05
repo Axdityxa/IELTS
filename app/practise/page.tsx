@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Book, Mic, Headphones, Pencil, ArrowLeft, LayoutGrid, Timer } from 'lucide-react';
-import ReadingTest from '@/components/Modes/Read';
 import WritingTest from '@/components/Modes/Write';
 import SpeakingTest from '@/components/Modes/Speak';
 import ListeningTest from '@/components/Modes/Listen';
@@ -17,6 +17,7 @@ type Section = {
 };
 
 export default function PracticeMode() {
+  const router = useRouter(); // Initialize the router
   const [currentScreen, setCurrentScreen] = useState('mode-select');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [questionCount, setQuestionCount] = useState<number>(10);
@@ -190,7 +191,8 @@ export default function PracticeMode() {
   const renderTest = () => {
     switch (selectedSection) {
       case 'reading':
-        return <ReadingTest />;
+        router.push('/baseband-test?timer=5'); // Navigate to the specified URL when the reading test is selected
+        return null; // Return null as we don't want to render anything here
       case 'writing':
         return <WritingTest />;
       case 'speaking':
